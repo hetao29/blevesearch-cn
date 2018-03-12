@@ -3,9 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	_ "github.com/hetao29/blevesearch-cn/scws/bleve"
-
 	"github.com/blevesearch/bleve"
+	_ "github.com/hetao29/blevesearch-cn/scws/bleve"
 )
 
 type Data struct {
