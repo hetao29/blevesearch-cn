@@ -1,6 +1,23 @@
 # blevesearch-cn
 blevesearch support chinese language
 
+## install scws
+```bash
+$ wget http://www.xunsearch.com/scws/down/scws-1.2.1.tar.bz2 
+$ tar xjf scws-1.2.1.tar.bz2 
+$ cd scws-1.2.1
+$ ./configure 
+$ make 
+$ make install
+```
+
+## download
+```bash
+go get github.com/hetao29/blevesearch-cn
+```
+
+## usage
+
 ```golang
 package main
 
