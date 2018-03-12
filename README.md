@@ -13,6 +13,7 @@ $ make install
 
 ## download
 ```bash
+go get github.com/blevesearch/bleve
 go get github.com/hetao29/blevesearch-cn
 ```
 
