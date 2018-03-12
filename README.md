@@ -24,7 +24,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	_ "scws/bleve"
+	_ "github.com/hetao29/blevesearch-cn/scws/bleve"
 
 	"github.com/blevesearch/bleve"
 )
