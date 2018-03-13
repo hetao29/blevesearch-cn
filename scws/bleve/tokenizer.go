@@ -3,26 +3,25 @@ package bleve
 import (
 	"errors"
 	"runtime"
-
+	"scws"
 	"github.com/blevesearch/bleve/analysis"
 	"github.com/blevesearch/bleve/registry"
-	"scws"
 )
 
 type ScwsTokenizer struct {
 	handle *scws.Scws
 }
 
-func NewScwsTokenizer(dict, rule string) *ScwsTokenizer {
+func NewScwsTokenizer(dict, rule string) (*ScwsTokenizer,error){
 	x := scws.NewScws()
 	err := x.SetDict(dict, scws.SCWS_XDICT_XDB)
 	if err != nil {
-		return nil
+		return  nil,err
 	}
 	if rule != "" {
 		err = x.SetRule(rule)
 		if err != nil {
-			return nil
+			return nil ,err
 		}
 	}
 
@@ -31,7 +30,7 @@ func NewScwsTokenizer(dict, rule string) *ScwsTokenizer {
 	x.SetMulti(scws.SCWS_MULTI_SHORT | scws.SCWS_MULTI_DUALITY)
 
 	x.Init(runtime.NumCPU())
-	return &ScwsTokenizer{x}
+	return &ScwsTokenizer{x},nil
 }
 
 func (x *ScwsTokenizer) Free() {
@@ -64,13 +63,17 @@ func (x *ScwsTokenizer) Tokenize(sentence []byte) analysis.TokenStream {
 func tokenizerConstructor(config map[string]interface{}, cache *registry.Cache) (analysis.Tokenizer, error) {
 	dict, ok := config["dict"].(string)
 	if !ok {
-		return nil, errors.New("config dictpath not found")
+		return nil, errors.New("config dict file not found")
 	}
 	rule, _ := config["rule"].(string)
 
-	return NewScwsTokenizer(dict, rule), nil
+	scws,err := NewScwsTokenizer(dict, rule)
+	if(err !=nil){
+		return nil,err
+	}
+	return scws,nil
 }
 
 func init() {
-	registry.RegisterTokenizer("scws", tokenizerConstructor)
+	registry.RegisterTokenizer(Name, tokenizerConstructor)
 }

@@ -1,20 +1,16 @@
 package bleve
 
 import (
-	"errors"
 	"github.com/blevesearch/bleve/analysis"
 	"github.com/blevesearch/bleve/registry"
 )
 
+const Name = "scws"
 type ScwsAnalyzer struct {
 }
 
 func analyzerConstructor(config map[string]interface{}, cache *registry.Cache) (*analysis.Analyzer, error) {
-	tokenizerName, ok := config["tokenizer"].(string)
-	if !ok {
-		return nil, errors.New("must specify tokenizer")
-	}
-	tokenizer, err := cache.TokenizerNamed(tokenizerName)
+	tokenizer, err := cache.TokenizerNamed(Name)
 	if err != nil {
 		return nil, err
 	}
@@ -25,5 +21,5 @@ func analyzerConstructor(config map[string]interface{}, cache *registry.Cache) (
 }
 
 func init() {
-	registry.RegisterAnalyzer("scws", analyzerConstructor)
+	registry.RegisterAnalyzer(Name, analyzerConstructor)
 }
