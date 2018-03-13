@@ -3,7 +3,7 @@ package bleve
 import (
 	"errors"
 	"runtime"
-	"scws"
+	"github.com/hetao29/blevesearch-cn/scws"
 	"github.com/blevesearch/bleve/analysis"
 	"github.com/blevesearch/bleve/registry"
 )
