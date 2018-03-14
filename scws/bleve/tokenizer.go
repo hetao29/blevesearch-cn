@@ -2,7 +2,6 @@ package bleve
 
 import (
 	"errors"
-	"fmt"
 	"runtime"
 	"github.com/hetao29/blevesearch-cn/scws"
 	"github.com/blevesearch/bleve/analysis"
@@ -61,7 +60,6 @@ func (x *ScwsTokenizer) Tokenize(sentence []byte) analysis.TokenStream {
 
 	}
 	for _, word := range words {
-		fmt.Println(string(word.Term));
 		token := analysis.Token{
 			Term:     []byte(word.Term),
 			Start:    word.Start,
