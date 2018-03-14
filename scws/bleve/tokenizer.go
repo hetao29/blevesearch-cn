@@ -2,6 +2,7 @@ package bleve
 
 import (
 	"errors"
+	"fmt"
 	"runtime"
 	"github.com/hetao29/blevesearch-cn/scws"
 	"github.com/blevesearch/bleve/analysis"
@@ -11,15 +12,28 @@ import (
 type ScwsTokenizer struct {
 	handle *scws.Scws
 }
+var(
+	Dict string
+	Rule string
+)
+func SetDict(dict string){
+	Dict = dict
+}
+func SetRule(rule string){
+	Rule = rule
+}
 
-func NewScwsTokenizer(dict, rule string) (*ScwsTokenizer,error){
+func NewScwsTokenizer() (*ScwsTokenizer,error){
+	if Dict=="" {
+		return nil, errors.New("config dict file not found")
+	}
 	x := scws.NewScws()
-	err := x.SetDict(dict, scws.SCWS_XDICT_XDB)
+	err := x.SetDict(Dict, scws.SCWS_XDICT_XDB)
 	if err != nil {
 		return  nil,err
 	}
-	if rule != "" {
-		err = x.SetRule(rule)
+	if Rule != "" {
+		err = x.SetRule(Rule)
 		if err != nil {
 			return nil ,err
 		}
@@ -47,6 +61,7 @@ func (x *ScwsTokenizer) Tokenize(sentence []byte) analysis.TokenStream {
 
 	}
 	for _, word := range words {
+		fmt.Println(string(word.Term));
 		token := analysis.Token{
 			Term:     []byte(word.Term),
 			Start:    word.Start,
@@ -62,12 +77,15 @@ func (x *ScwsTokenizer) Tokenize(sentence []byte) analysis.TokenStream {
 
 func tokenizerConstructor(config map[string]interface{}, cache *registry.Cache) (analysis.Tokenizer, error) {
 	dict, ok := config["dict"].(string)
-	if !ok {
-		return nil, errors.New("config dict file not found")
+	if ok {
+		SetDict(dict);
 	}
-	rule, _ := config["rule"].(string)
+	rule, ok := config["rule"].(string)
+	if ok {
+		SetRule(rule);
+	}
 
-	scws,err := NewScwsTokenizer(dict, rule)
+	scws,err := NewScwsTokenizer()
 	if(err !=nil){
 		return nil,err
 	}

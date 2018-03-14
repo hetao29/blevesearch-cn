@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/blevesearch/bleve"
-	_ "github.com/hetao29/blevesearch-cn/scws/bleve"
+	//"github.com/blevesearch/bleve/registry"
+	cn "github.com/hetao29/blevesearch-cn/scws/bleve"
 )
 
 type Data struct {
@@ -15,31 +16,40 @@ type Data struct {
 
 func main() {
 
+	cn.SetDict("/Users/hetal/dict/dict.utf8.xdb");
+	cn.SetRule("/Users/hetal/dict/rules.utf8.ini");
+	//types, instance := registry.AnalyzerTypesAndInstances();
+	//fmt.Println(types);
+	//fmt.Println(instance);
 	// open a new index
 	mapping := bleve.NewIndexMapping()
 
-	err := mapping.AddCustomTokenizer("scws",
+	/*
+	err := mapping.AddCustomTokenizer("cn",
 		map[string]interface{}{
 			"dict": "/Users/hetal/dict/dict.utf8.xdb",
 			//"rule": "/Users/hetal/dict/rules.utf8.ini",
-			"type":"scws",
+			"type":"cn",
 		},
 	)
 	if err != nil {
 		panic(err)
 	}
 
-	err = mapping.AddCustomAnalyzer("scws",
+	err = mapping.AddCustomAnalyzer("cn",
 		map[string]interface{}{
-			"type":      "scws",
-			"tokenizer": "scws",
+			"type":      "cn",
+			"tokenizer": "cn",
 		},
 	)
 	if err != nil {
 		panic(err)
 	}
-	mapping.DefaultAnalyzer = "scws"
+	*/
+	mapping.DefaultAnalyzer = "cn"
 
+	ct, _ := json.Marshal(mapping)
+	fmt.Println(string(ct));
 	index, err := bleve.New("example.bleve", mapping)
 	if err != nil {
 

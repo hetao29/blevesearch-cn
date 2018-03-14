@@ -5,7 +5,7 @@ import (
 	"github.com/blevesearch/bleve/registry"
 )
 
-const Name = "scws"
+const Name = "cn"
 type ScwsAnalyzer struct {
 }
 
