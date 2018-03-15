@@ -13,8 +13,32 @@ type Data struct {
 	Id   int
 	T    string
 }
+type Doc struct{
+	Id string `json:id`
+	Doc interface{} `json:doc`
+}
 
 func main() {
+
+
+	var requestBody=`[{"id":"xx","doc":{"x":"b"}},{"id":"xx2","doc":{"x":"b"}}]`;
+	//var doc interface{}
+	var doc []Doc
+	err := json.Unmarshal([]byte(requestBody), &doc)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if len(doc) > 0{
+
+		for _, d:= range doc{
+			fmt.Println(d.Id);
+			fmt.Println(d.Doc);
+		}
+	}
+	ct, _ := json.Marshal(doc)
+	fmt.Println(string(ct));
+	return
 
 	cn.SetDict("/Users/hetal/dict/dict.utf8.xdb");
 	cn.SetRule("/Users/hetal/dict/rules.utf8.ini");
@@ -48,7 +72,7 @@ func main() {
 	*/
 	mapping.DefaultAnalyzer = "cn"
 
-	ct, _ := json.Marshal(mapping)
+	ct, _ = json.Marshal(mapping)
 	fmt.Println(string(ct));
 	index, err := bleve.New("example.bleve", mapping)
 	if err != nil {
@@ -73,8 +97,12 @@ func main() {
 	}
 
 	// index some data
-	index.Index("id", data)
-	index.Index("id2", data2)
+	batch := index.NewBatch();
+	batch.Index("id",data);
+	batch.Index("id2",data2);
+	//index.Batch(batch);
+	//index.Index("id", data)
+	//index.Index("id2", data2)
 
 	// search for some text
 	//query := bleve.NewMatchQuery("有效")
